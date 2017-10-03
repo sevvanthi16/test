@@ -1,0 +1,37 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bvorders
+    DATASOURCENAME=ds_sample
+    CATALOGNAME = '${databases.sevvanthi.views.jdbc.bvorders.CATALOGNAME}'
+    SCHEMANAME = '${databases.sevvanthi.views.jdbc.bvorders.SCHEMANAME}'
+    RELATIONNAME='orders' 
+    OUTPUTSCHEMA (
+        orderno = 'orderno' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='varchar', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL SORTABLE,
+        customerid = 'customerid' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='int', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL SORTABLE,
+        orderdate = 'orderdate' :'java.sql.Timestamp' (OPT) (sourcetyperadix='0', sourcetypename='datetime', sourcetypeid='93', sourcetypedecimals='3', sourcetypesize='23')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'pk_ono' PRIMARY KEY ( 'orderno' )
+    CONSTRAINT 'FK__orders__customer__2F10007B' FOREIGN KEY ( 'customerid' ) 
+    REFERENCES 'OnlineShopping'.'dbo'.'customers'( 'customerid' )  ON UPDATE RESTRICT  ON DELETE RESTRICT NOT DEFERRABLE 
+    INDEX 'pk_ono' CLUSTER UNIQUE PRIMARY ( 'orderno' );
+
+CREATE OR REPLACE TABLE bvorders I18N india (
+        orderno:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '12'), 
+        customerid:int (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', sourcetypeid = '4'), 
+        orderdate:date (sourcetyperadix = '0', sourcetypedecimals = '3', sourcetypesize = '23', sourcetypeid = '93')
+    )
+    CONSTRAINT 'pk_ono' PRIMARY KEY ( 'orderno' )
+    CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bvorders(
+        I18N india
+        CONSTRAINTS (
+             ADD orderno (any) OPT ANY
+             ADD customerid (any) OPT ANY
+             ADD orderdate (any) OPT ANY
+        )
+        OUTPUTLIST (customerid, orderdate, orderno
+        )
+        WRAPPER (jdbc bvorders)
+    );
+

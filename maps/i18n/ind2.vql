@@ -1,0 +1,9 @@
+﻿CREATE OR REPLACE MAP i18n ind2 (
+    'country' = 'IND'
+    'datepattern' = 'dd-MM-YYYY'
+    'doubledecimalposition' = '2'
+    'doubledecimalseparator' = ''
+    'doublegroupseparator' = ''
+    'language' = 'en'
+);
+

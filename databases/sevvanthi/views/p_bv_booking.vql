@@ -1,0 +1,5 @@
+﻿CREATE OR REPLACE VIEW p_bv_booking AS SELECT bv_booking.hotel_no AS hotel_no, bv_booking.guest_no AS guest_no, bv_booking.roomid AS roomid, bv_booking.booking_id AS booking_id, bv_booking.date_from AS date_from, bv_booking.date_to AS date_to FROM bv_booking;
+
+ALTER VIEW p_bv_booking
+ LAYOUT (bv_booking = [20, 20, 200, 146]);
+

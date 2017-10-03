@@ -1,0 +1,39 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_room
+    DATASOURCENAME=ds_sample
+    CATALOGNAME = '${databases.sevvanthi.views.jdbc.bv_room.CATALOGNAME}'
+    SCHEMANAME = '${databases.sevvanthi.views.jdbc.bv_room.SCHEMANAME}'
+    RELATIONNAME='ROOM' 
+    OUTPUTSCHEMA (
+        room_no = 'room_no' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='varchar', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='255')  SORTABLE,
+        hotel_no = 'hotel_no' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='varchar', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='1')  SORTABLE,
+        roomid = 'roomid' :'java.lang.Integer' (OPT) (sourcetyperadix='10', sourcetypename='int', sourcetypeid='4', sourcetypedecimals='0', sourcetypesize='10')  NOT NULL SORTABLE,
+        price = 'price' :'java.lang.Long' (OPT) (sourcetyperadix='10', sourcetypename='decimal', sourcetypeid='3', sourcetypedecimals='0', sourcetypesize='18')  SORTABLE
+    )
+    CONSTRAINT 'pk_roomid' PRIMARY KEY ( 'roomid' )
+    CONSTRAINT 'FK__ROOM__hotel_no__2D27B809' FOREIGN KEY ( 'hotel_no' ) 
+    REFERENCES 'HotelManagement'.'dbo'.'HOTEL'( 'hotel_no' )  ON UPDATE RESTRICT  ON DELETE RESTRICT NOT DEFERRABLE 
+    INDEX 'pk_roomid' CLUSTER UNIQUE PRIMARY ( 'roomid' );
+
+CREATE OR REPLACE TABLE bv_room I18N ve (
+        room_no:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '255', sourcetypeid = '12'), 
+        hotel_no:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '1', sourcetypeid = '12'), 
+        roomid:blob (sourcetyperadix = '10', sourcetypeid = '-3', sourcetypedecimals = '0', sourcetypesize = '10'), 
+        price:long (sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '18', sourcetypeid = '3')
+    )
+    CONSTRAINT 'pk_roomid' PRIMARY KEY ( 'roomid' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_room(
+        I18N ve
+        CONSTRAINTS (
+             ADD room_no (any) OPT ANY
+             ADD hotel_no (any) OPT ANY
+             ADD roomid (any) OPT ANY
+             ADD price (any) OPT ANY
+        )
+        OUTPUTLIST (hotel_no, price, room_no, roomid
+        )
+        WRAPPER (jdbc bv_room)
+    );
+

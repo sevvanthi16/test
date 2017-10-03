@@ -1,0 +1,8 @@
+﻿CREATE OR REPLACE DATABASE sevvanthi;
+
+ALTER DATABASE sevvanthi
+  I18N india;
+
+ALTER DATABASE sevvanthi
+  CHARSET DEFAULT;
+

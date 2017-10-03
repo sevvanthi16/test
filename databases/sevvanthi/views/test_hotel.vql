@@ -1,0 +1,8 @@
+﻿CREATE OR REPLACE VIEW test_hotel (
+    sev (sourcetypeid = '-3', contenttype = 'autodetect')
+)
+ AS SELECT bv_hotel.hotel_no AS hotel_no, bv_hotel.name AS name, bv_hotel.address AS address, cast('blob', hotel_no) AS sev, bv_hotel.name AS sev1, 5 AS sev2 FROM bv_hotel;
+
+ALTER VIEW test_hotel
+ LAYOUT (bv_hotel = [20, 20, 235, 86]);
+

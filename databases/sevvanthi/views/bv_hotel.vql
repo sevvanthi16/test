@@ -1,0 +1,34 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_hotel
+    DATASOURCENAME=ds_sample
+    CATALOGNAME = '${databases.sevvanthi.views.jdbc.bv_hotel.CATALOGNAME}'
+    SCHEMANAME = '${databases.sevvanthi.views.jdbc.bv_hotel.SCHEMANAME}'
+    RELATIONNAME='HOTEL' 
+    OUTPUTSCHEMA (
+        hotel_no = 'hotel_no' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='varchar', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='1')  NOT NULL SORTABLE,
+        name = 'name' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='varchar', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='255')  SORTABLE,
+        address = 'address' :'java.lang.String' (OPT) (sourcetyperadix='0', sourcetypename='varchar', sourcetypeid='12', sourcetypedecimals='0', sourcetypesize='255')  SORTABLE
+    )
+    CONSTRAINT 'pk_hotelno' PRIMARY KEY ( 'hotel_no' )
+    INDEX 'pk_hotelno' CLUSTER UNIQUE PRIMARY ( 'hotel_no' );
+
+CREATE OR REPLACE TABLE bv_hotel I18N ve (
+        hotel_no:blob (sourcetyperadix = '0', sourcetypeid = '-3', sourcetypedecimals = '0', sourcetypesize = '1'), 
+        name:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '255', sourcetypeid = '12'), 
+        address:text (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '255', sourcetypeid = '12')
+    )
+    CONSTRAINT 'pk_hotelno' PRIMARY KEY ( 'hotel_no' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_hotel(
+        I18N ve
+        CONSTRAINTS (
+             ADD hotel_no (any) OPT ANY
+             ADD name (any) OPT ANY
+             ADD address (any) OPT ANY
+        )
+        OUTPUTLIST (address, hotel_no, name
+        )
+        WRAPPER (jdbc bv_hotel)
+    );
+

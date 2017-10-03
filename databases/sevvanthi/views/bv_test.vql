@@ -1,0 +1,25 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_test
+    DATASOURCENAME=ds_sample
+    CATALOGNAME = '${databases.sevvanthi.views.jdbc.bv_test.CATALOGNAME}'
+    SCHEMANAME = '${databases.sevvanthi.views.jdbc.bv_test.SCHEMANAME}'
+    RELATIONNAME='TEST' 
+    OUTPUTSCHEMA (
+        id = 'Id' :'java.sql.Blob' (OPT) (sourcetyperadix='0', sourcetypename='varbinary', sourcetypeid='2004', sourcetypedecimals='0', sourcetypesize='2147483647')  NOT SORTABLE
+    );
+
+CREATE OR REPLACE TABLE bv_test I18N us_pst (
+        id:blob (sourcetyperadix = '0', sourcetypedecimals = '0', sourcetypesize = '2147483647', sourcetypeid = '-3')
+    )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_test(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id NOS ZERO ()
+        )
+        OUTPUTLIST (id
+        )
+        WRAPPER (jdbc bv_test)
+    );
+
